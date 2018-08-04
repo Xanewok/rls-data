@@ -21,6 +21,8 @@ extern crate serde;
 extern crate serde_derive;
 
 pub mod config;
+#[cfg(feature = "serialize-serde")]
+mod serde_helper;
 
 use std::path::PathBuf;
 
@@ -102,6 +104,7 @@ pub struct GlobalCrateId {
 #[cfg_attr(feature = "serialize-rustc", derive(RustcDecodable, RustcEncodable))]
 #[derive(Debug, Clone)]
 pub struct SpanData {
+    #[cfg_attr(feature = "serialize-serde", serde(deserialize_with = "serde_helper::decode_pathbuf"))]
     pub file_name: PathBuf,
     pub byte_start: u32,
     pub byte_end: u32,
